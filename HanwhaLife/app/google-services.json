@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574105075176",
+    "project_id": "hanwhalife-8a9e7",
+    "storage_bucket": "hanwhalife-8a9e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574105075176:android:c9f53687043e3d7048385d",
+        "android_client_info": {
+          "package_name": "com.thuatnguyen.hanwhalife"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVjtHJhFDDqcZsicISjK_Qkzq_gSqion8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
