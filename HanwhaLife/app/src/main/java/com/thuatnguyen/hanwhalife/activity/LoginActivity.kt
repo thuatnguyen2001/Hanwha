@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.model.Account
+import com.thuatnguyen.hanwhalife.model.BMBH
 
 class LoginActivity : AppCompatActivity() {
 
@@ -49,6 +50,14 @@ class LoginActivity : AppCompatActivity() {
     private fun addEvent() {
         hienThiMatKhau()
         xuLyDangNhap()
+        xuLyQuenMatKhau()
+    }
+
+    private fun xuLyQuenMatKhau() {
+        txtQuenMK.setOnClickListener {
+            val intent = Intent(this@LoginActivity, QuenMatKhauActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun xuLyDangNhap() {
@@ -74,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
                             if (account != null && account.password == password) {
                                 Toast.makeText(this@LoginActivity, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                                intent.putExtra("ACCOUNT",account)
                                 startActivity(intent)
                                 return
                             }
@@ -91,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
     }
+
 
     private fun hienThiMatKhau() {
         btnView.setOnClickListener {
