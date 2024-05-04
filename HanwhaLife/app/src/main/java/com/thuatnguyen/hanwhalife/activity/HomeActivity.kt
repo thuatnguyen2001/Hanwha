@@ -1,5 +1,6 @@
 package com.thuatnguyen.hanwhalife.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -124,7 +125,6 @@ class HomeActivity : AppCompatActivity() {
                     if (dataSnapshot.exists()) {
                         for (snapshot in dataSnapshot.children) {
                             bmbh = snapshot.getValue(BMBH::class.java)!!
-                            Toast.makeText(this@HomeActivity, bmbh.hoTen, Toast.LENGTH_SHORT).show()
                             return
                         }
                     }
@@ -143,7 +143,6 @@ class HomeActivity : AppCompatActivity() {
                     if (dataSnapshot.exists()) {
                         for (snapshot in dataSnapshot.children) {
                             ndbh = snapshot.getValue(NDBH::class.java)!!
-                            Toast.makeText(this@HomeActivity, ndbh.hoTen, Toast.LENGTH_SHORT).show()
                             return
                         }
                     }
@@ -162,7 +161,6 @@ class HomeActivity : AppCompatActivity() {
                     if (dataSnapshot.exists()) {
                         for (snapshot in dataSnapshot.children) {
                             nth = snapshot.getValue(NTH::class.java)!!
-                            Toast.makeText(this@HomeActivity, nth.hoTen, Toast.LENGTH_SHORT).show()
                             return
                         }
                     }
@@ -174,5 +172,10 @@ class HomeActivity : AppCompatActivity() {
                     Toast.makeText(this@HomeActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+    companion object {
+        fun closeThisActivity(activity: Activity) {
+            activity.finish() // Đóng Activity hiện tại
+        }
     }
 }

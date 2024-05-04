@@ -1,5 +1,6 @@
 package com.thuatnguyen.hanwhalife.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
@@ -43,7 +44,9 @@ class LoginActivity : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
+
         anhXa();
+        getPassword()
         addEvent();
     }
 
@@ -52,6 +55,8 @@ class LoginActivity : AppCompatActivity() {
         xuLyDangNhap()
         xuLyQuenMatKhau()
     }
+
+
 
     private fun xuLyQuenMatKhau() {
         txtQuenMK.setOnClickListener {
@@ -81,10 +86,18 @@ class LoginActivity : AppCompatActivity() {
                         for (snapshot in dataSnapshot.children) {
                             val account = snapshot.getValue(Account::class.java)
                             if (account != null && account.password == password) {
+                                if(ckbLogin.isChecked)
+                                {
+                                    savePassword(account.username.toString(),account.password.toString())
+                                }else
+                                {
+                                    clearSavedPassword()
+                                }
                                 Toast.makeText(this@LoginActivity, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                                 intent.putExtra("ACCOUNT",account)
                                 startActivity(intent)
+                                finish()
                                 return
                             }
                         }
@@ -100,6 +113,37 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    // Lưu mật khẩu vào SharedPreferences
+    fun savePassword(username: String, password: String) {
+        val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("username", username)
+        editor.putString("password", password)
+        editor.putBoolean("checked", ckbLogin.isChecked)
+        editor.apply()
+    }
+
+    // Xóa mật khẩu đã lưu từ SharedPreferences
+    fun clearSavedPassword() {
+        val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("username")
+        editor.remove("password")
+        editor.remove("checked")
+        editor.apply()
+    }
+
+    // Đọc mật khẩu từ SharedPreferences
+    fun getPassword() {
+        val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val user =  sharedPreferences.getString("username", null)
+        val pass =  sharedPreferences.getString("password", null)
+        edtUserName.setText(user)
+        edtPassword.setText(pass)
+        val check =sharedPreferences.getBoolean("checked", false)
+        ckbLogin.isChecked = check
     }
 
 

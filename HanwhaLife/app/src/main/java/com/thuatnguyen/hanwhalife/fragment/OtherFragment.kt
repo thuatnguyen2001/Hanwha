@@ -17,7 +17,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
+import com.thuatnguyen.hanwhalife.activity.DoiMatKhauActivity
 import com.thuatnguyen.hanwhalife.activity.HomeActivity
+import com.thuatnguyen.hanwhalife.activity.LoginActivity
 import com.thuatnguyen.hanwhalife.activity.ThongTinCaNhanActivity
 import com.thuatnguyen.hanwhalife.activity.ThongTinLienHeActivity
 import com.thuatnguyen.hanwhalife.model.Account
@@ -64,13 +66,16 @@ class OtherFragment : Fragment() {
 
     private fun xuLyDangXuat() {
         btnDangXuat.setOnClickListener {
-            requireActivity().finish()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
     private fun xuLyDoiMatKhau() {
         btnDoiMatKhau.setOnClickListener {
-
+            val intent = Intent(activity, DoiMatKhauActivity::class.java)
+            intent.putExtra("ACCOUNT",account)
+            startActivity(intent)
         }
     }
 
