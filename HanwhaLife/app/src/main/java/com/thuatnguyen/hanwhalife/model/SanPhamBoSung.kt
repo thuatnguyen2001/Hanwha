@@ -2,9 +2,8 @@ package com.thuatnguyen.hanwhalife.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
 
-class SanPhamChinh(
+class SanPhamBoSung(
     val tenSP:String?="",
     val soTienBH:Long?=0,
     val phiDinhKy:Long?=0,
@@ -29,13 +28,14 @@ class SanPhamChinh(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<SanPhamChinh> {
-        override fun createFromParcel(parcel: Parcel): SanPhamChinh {
-            return SanPhamChinh(parcel)
+    companion object CREATOR : Parcelable.Creator<SanPhamBoSung> {
+        override fun createFromParcel(parcel: Parcel): SanPhamBoSung {
+            return SanPhamBoSung(parcel)
         }
 
-        override fun newArray(size: Int): Array<SanPhamChinh?> {
+        override fun newArray(size: Int): Array<SanPhamBoSung?> {
             return arrayOfNulls(size)
         }
     }
+
 }

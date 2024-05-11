@@ -41,7 +41,6 @@ class HomeActivity : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().reference
         loadDuLieu()
-        Toast.makeText(this,account?.username,Toast.LENGTH_SHORT).show()
 
         val topFrame = TopLogoFragment()
         supportFragmentManager.beginTransaction().apply {

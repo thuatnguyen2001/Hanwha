@@ -4,11 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.thuatnguyen.hanwhalife.R
+import com.thuatnguyen.hanwhalife.dialog.DieuChinhCaNhanDialog
 
 class DichVuFragment : Fragment() {
 
@@ -41,40 +44,106 @@ class DichVuFragment : Fragment() {
     }
 
     private fun xuLyChucNangThuVien() {
-        itemThuVien.setOnClickListener{
-            Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+        itemThuVien.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Khi người dùng bắt đầu chạm vào LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.xam))
+                    Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Khi người dùng nhả ra LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+            }
+            true
         }
     }
 
     private fun xuLyChucNangChamSoc() {
-        itemChamSoc.setOnClickListener{
-//            val intent = Intent(activity, ContactActivity::class.java)
-//            startActivity(intent)
+        itemChamSoc.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Khi người dùng bắt đầu chạm vào LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.xam))
+                    Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Khi người dùng nhả ra LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+            }
+            true
         }
     }
 
     private fun xuLyChucNangDieuChinhHD() {
-        itemDieuChinhHD.setOnClickListener{
-            Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+        itemDieuChinhHD.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Khi người dùng bắt đầu chạm vào LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.xam))
+                    Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Khi người dùng nhả ra LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+            }
+            true
         }
     }
 
     private fun xuLyChucNangDieuChinhTTCN() {
-        itemDieuChinhTTCN.setOnClickListener{
-//            val bottomSheetDialogFragment = DialogCaNhan()
-//            bottomSheetDialogFragment.show(parentFragmentManager, bottomSheetDialogFragment.tag)
+
+        itemDieuChinhTTCN.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Khi người dùng bắt đầu chạm vào LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.xam))
+                    val bottomSheetDialogFragment = DieuChinhCaNhanDialog()
+                    bottomSheetDialogFragment.show(parentFragmentManager, bottomSheetDialogFragment.tag)
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Khi người dùng nhả ra LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+            }
+            true
         }
     }
 
     private fun xuLyChucNangThanhToan() {
-        itemThanhToan.setOnClickListener{
+        itemThanhToan.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Khi người dùng bắt đầu chạm vào LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.xam))
 
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Khi người dùng nhả ra LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+            }
+            true
         }
     }
 
     private fun xuLyChucNangGQQL() {
-        itemGQQL.setOnClickListener{
-            Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+        itemGQQL.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Khi người dùng bắt đầu chạm vào LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.xam))
+                    Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Khi người dùng nhả ra LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+            }
+            true
         }
     }
 
@@ -85,6 +154,26 @@ class DichVuFragment : Fragment() {
         itemDieuChinhHD = view.findViewById(R.id.itemDieuChinhHD)
         itemChamSoc = view.findViewById(R.id.itemChamSoc)
         itemThuVien = view.findViewById(R.id.itemThuVien)
+
+
+
+        xuLyClick(itemThanhToan)
+        xuLyClick(itemGQQL)
+        xuLyClick(itemDieuChinhHD)
+        xuLyClick(itemChamSoc)
+        xuLyClick(itemThuVien)
+    }
+
+    private fun xuLyClick(itemDieuChinhTTCN: LinearLayout?) {
+        itemDieuChinhTTCN?.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> {
+                    // Khi người dùng nhả ra LinearLayout
+                    view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+            }
+            true
+        }
     }
 
 }
