@@ -70,6 +70,10 @@ class ChonLoaiDieuChinhFragment : Fragment() {
             }
         }
 
+        btnBack.setOnClickListener {
+            activity?.finish()
+        }
+
         return view
     }
 

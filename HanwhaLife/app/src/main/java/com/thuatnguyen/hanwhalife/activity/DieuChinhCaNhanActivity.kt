@@ -27,9 +27,9 @@ class DieuChinhCaNhanActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val newFragment = ChonLoaiDieuChinhFragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
-        fragmentTransaction.replace(R.id.frameDieuChinh, newFragment)
-        fragmentTransaction.addToBackStack(null) // Thêm Fragment vào Stack để có thể quay lại khi cần
+        val chonLoaiDieuChinhFragment = ChonLoaiDieuChinhFragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
+        fragmentTransaction.replace(R.id.frameDieuChinh, chonLoaiDieuChinhFragment,"Buoc1")
+        fragmentTransaction.addToBackStack("buoc1") // Thêm Fragment vào Stack để có thể quay lại khi cần
         fragmentTransaction.commit()
 
 //        val value = intent.getStringExtra("DieuChinh")

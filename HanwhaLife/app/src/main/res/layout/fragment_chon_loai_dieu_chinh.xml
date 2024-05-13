@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:padding="15sp"
     android:orientation="vertical"
-    tools:context=".DieuChinhCaNhan1Fragment">
+    android:tag="chon_loai_dieu_chinh"
+    tools:context=".fragment.ChonLoaiDieuChinhFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +51,8 @@
         <LinearLayout
             android:id="@+id/btnBack"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
             android:orientation="horizontal"
             android:layout_weight="1">
             <ImageButton
@@ -71,9 +73,9 @@
         <LinearLayout
             android:id="@+id/btnNext"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:gravity="end"
+            android:gravity="end|center"
             android:layout_weight="1">
 
             <TextView
