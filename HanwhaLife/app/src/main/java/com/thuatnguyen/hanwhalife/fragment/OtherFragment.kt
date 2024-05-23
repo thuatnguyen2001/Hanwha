@@ -53,7 +53,7 @@ class OtherFragment : Fragment() {
 
     private fun loadDuLieu() {
         bmbh = (activity as HomeActivity).bmbh
-        account = (activity as HomeActivity).account
+        account = (activity as HomeActivity).account!!
         txtHoTen.text= bmbh.hoTen
     }
 

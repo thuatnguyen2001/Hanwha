@@ -53,13 +53,18 @@ class DieuChinhCaNhan3Fragment : Fragment() {
                 Toast.makeText(requireContext(), "Vui lòng nhập đầy đủ", Toast.LENGTH_SHORT).show()
             }
         }
-//
+
+        btnBack.setOnClickListener {
+            val parentFragmentManager = parentFragmentManager
+            parentFragmentManager.popBackStack()
+        }
 
         return view
     }
 
     private fun xuLyNext(cmnd: String, ngaycap: String, noiCap: String) {
         val bundle = Bundle()
+        bundle.putString("CMNDCU", person.cccd)
         bundle.putString("CMND", cmnd)
         bundle.putString("NGAYCAP", ngaycap)
         bundle.putString("NOICAP", noiCap)
@@ -67,7 +72,7 @@ class DieuChinhCaNhan3Fragment : Fragment() {
         val fragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val newFragment = DieuChinhCaNhan3Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
+        val newFragment = DieuChinhCaNhan4Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
         newFragment.arguments = bundle
         fragmentTransaction.replace(R.id.frameDieuChinh, newFragment,"Buoc4")
         fragmentTransaction.addToBackStack("Buoc4") // Thêm Fragment vào Stack để có thể quay lại khi cần

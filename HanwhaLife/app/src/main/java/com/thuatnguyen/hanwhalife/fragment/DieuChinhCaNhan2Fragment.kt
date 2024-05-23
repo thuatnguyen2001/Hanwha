@@ -38,7 +38,7 @@ class DieuChinhCaNhan2Fragment : Fragment() {
         {
             doiTuongList.add(Person(ndbh.ndbhID,ndbh.hoTen,ndbh.ngaySinh,ndbh.gioiTinh,ndbh.cccd,ndbh.ngayCap,ndbh.noiCap))
         }
-        if(!nth.cccd.equals(bmbh.cccd))
+        if(!nth.cccd.equals(bmbh.cccd) && !nth.cccd.equals(ndbh.cccd))
         {
             doiTuongList.add(Person(nth.nthID,nth.hoTen,nth.ngaySinh,nth.gioiTinh,nth.cccd,nth.ngayCap,nth.noiCap))
         }

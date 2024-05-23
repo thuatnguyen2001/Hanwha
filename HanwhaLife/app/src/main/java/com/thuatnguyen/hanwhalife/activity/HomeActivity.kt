@@ -1,7 +1,10 @@
 package com.thuatnguyen.hanwhalife.activity
 
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,18 +33,25 @@ import com.thuatnguyen.hanwhalife.model.NTH
 
 @Suppress("DEPRECATION")
 class HomeActivity : AppCompatActivity() {
-    lateinit var account: Account
+    var account: Account?=null
     lateinit var bmbh: BMBH
     lateinit var ndbh: NDBH
     lateinit var nth: NTH
     lateinit var databaseReference: DatabaseReference
+    lateinit var cccdCu:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home)
 
         databaseReference = FirebaseDatabase.getInstance().reference
+        account = intent.getParcelableExtra<Account>("ACCOUNT")!!
+        cccdCu = intent.getStringExtra("CCCDCU").toString()
         loadDuLieu()
+
+        Log.d("ddddd",cccdCu)
+        Toast.makeText(this@HomeActivity, cccdCu, Toast.LENGTH_SHORT).show()
 
         val topFrame = TopLogoFragment()
         supportFragmentManager.beginTransaction().apply {
@@ -115,10 +126,9 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun loadDuLieu() {
-        account = intent.getParcelableExtra<Account>("ACCOUNT")!!
-        databaseReference.child("BMBH").orderByChild("accountID").equalTo(account.accountID)
+
+        databaseReference.child("BMBH").orderByChild("accountID").equalTo(account!!.accountID)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -136,7 +146,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             })
 
-        databaseReference.child("NDBH").orderByChild("accountID").equalTo(account.accountID)
+        databaseReference.child("NDBH").orderByChild("accountID").equalTo(account!!.accountID)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -154,7 +164,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             })
 
-        databaseReference.child("NTH").orderByChild("accountID").equalTo(account.accountID)
+        databaseReference.child("NTH").orderByChild("accountID").equalTo(account!!.accountID)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -171,6 +181,40 @@ class HomeActivity : AppCompatActivity() {
                     Toast.makeText(this@HomeActivity, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
             })
+
+//        databaseReference.child("THAYDOICCCD").child(cccdCu).orderByChild("status").equalTo("true")
+//            .addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                    if (dataSnapshot.exists()) {
+//                        for (snapshot in dataSnapshot.children) {
+//                            databaseReference.child("BMBH").orderByChild("cccd").equalTo(cccdCu)
+//                                .addListenerForSingleValueEvent(object : ValueEventListener {
+//                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                                        if (dataSnapshot.exists()) {
+//                                            for (snapshot in dataSnapshot.children) {
+//                                                Toast.makeText(this@HomeActivity, dataSnapshot.key.toString(), Toast.LENGTH_SHORT).show()
+//                                                return
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    override fun onCancelled(databaseError: DatabaseError) {
+//                                        Log.e("Firebase", "Error: ${databaseError.message}")
+//                                        // Hiển thị thông báo lỗi nếu có lỗi xảy ra khi truy vấn dữ liệu
+//                                        Toast.makeText(this@HomeActivity, "An error occurred", Toast.LENGTH_SHORT).show()
+//                                    }
+//                                })
+//                            return
+//                        }
+//                    }
+//                }
+//
+//                override fun onCancelled(databaseError: DatabaseError) {
+//                    Log.e("Firebase", "Error: ${databaseError.message}")
+//                    // Hiển thị thông báo lỗi nếu có lỗi xảy ra khi truy vấn dữ liệu
+//                    Toast.makeText(this@HomeActivity, "An error occurred", Toast.LENGTH_SHORT).show()
+//                }
+//            })
     }
     companion object {
         fun closeThisActivity(activity: Activity) {

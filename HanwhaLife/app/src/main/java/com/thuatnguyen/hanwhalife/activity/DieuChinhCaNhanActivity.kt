@@ -16,6 +16,7 @@ class DieuChinhCaNhanActivity : AppCompatActivity() {
     lateinit var bmbh: BMBH
     lateinit var ndbh: NDBH
     lateinit var nth: NTH
+    var cccdCu : String =""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -50,5 +51,8 @@ class DieuChinhCaNhanActivity : AppCompatActivity() {
 //                commit()
 //            }
 //        }
+    }
+    fun updateMyString(newString: String) {
+        cccdCu = newString
     }
 }
