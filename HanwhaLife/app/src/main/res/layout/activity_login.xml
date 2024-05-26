@@ -66,6 +66,7 @@
         android:layout_height="50dp">
 
         <CheckBox
+            style="@style/CustomCheckbox"
             android:id="@+id/ckbLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,6 +80,7 @@
         android:id="@+id/btnLogin"
         android:background="@drawable/custom_buttom_login"
         android:text="Đăng nhập"
+        android:textSize="18sp"
         android:textColor="@color/white"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"

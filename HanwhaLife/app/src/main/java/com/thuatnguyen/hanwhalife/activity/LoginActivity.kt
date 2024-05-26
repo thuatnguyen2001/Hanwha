@@ -13,18 +13,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
 import com.thuatnguyen.hanwhalife.R
-import com.thuatnguyen.hanwhalife.model.Account
-import com.thuatnguyen.hanwhalife.model.BMBH
+import com.thuatnguyen.hanwhalife.model.User
 
 class LoginActivity : AppCompatActivity() {
 
@@ -67,52 +63,68 @@ class LoginActivity : AppCompatActivity() {
 
     private fun xuLyDangNhap() {
         btnLogin.setOnClickListener {
-            val username = edtUserName.text.toString().trim()
+            val email = edtUserName.text.toString().trim()
             val password = edtPassword.text.toString().trim()
-            if (username.isNotEmpty() && password.isNotEmpty()) {
-                signIn(username, password)
-            } else {
-                // Hiển thị thông báo lỗi nếu trường username hoặc password rỗng
-                Toast.makeText(this, "Vui lòng nhập đầy đủ", Toast.LENGTH_SHORT).show()
+
+            if (email.isEmpty()) {
+                edtUserName.error = "Email không được để trống"
+                edtUserName.requestFocus()
+                return@setOnClickListener
             }
+
+            if (password.isEmpty()) {
+                edtPassword.error = "Mật khẩu không được để trống"
+                edtPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Đăng nhập thành công
+                        val user = FirebaseAuth.getInstance().currentUser
+                        Toast.makeText(this@LoginActivity, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
+                        user?.let {
+                            val uid = it.uid
+                            savePassword(email,password)
+                            // Lấy dữ liệu từ Realtime Database và chuyển sang Activity khác
+                            fetchUserDataAndNavigate(uid)
+                        }
+
+                    } else {
+                        Toast.makeText(this@LoginActivity, "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
         }
     }
 
-    private fun signIn(username: String, password: String) {
-        databaseReference.child("accounts").orderByChild("username").equalTo(username)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (snapshot in dataSnapshot.children) {
-                            val account = snapshot.getValue(Account::class.java)
-                            if (account != null && account.password == password) {
-                                if(ckbLogin.isChecked)
-                                {
-                                    savePassword(account.username.toString(),account.password.toString())
-                                }else
-                                {
-                                    clearSavedPassword()
-                                }
-                                Toast.makeText(this@LoginActivity, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                                intent.putExtra("ACCOUNT",account)
-                                startActivity(intent)
-                                finish()
-                                return
-                            }
-                        }
-                    }
+    fun fetchUserDataAndNavigate(uid: String) {
+        val database = FirebaseDatabase.getInstance()
+        val userRef = database.getReference("users").child(uid)
 
-                    // Hiển thị thông báo lỗi nếu thông tin đăng nhập không chính xác
-                    Toast.makeText(this@LoginActivity, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show()
-                }
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Lấy thông tin người dùng từ snapshot
+                val name = dataSnapshot.child("name").getValue(String::class.java)
+                val email = dataSnapshot.child("email").getValue(String::class.java)
+                val userId = dataSnapshot.child("userID").getValue(String::class.java)
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("Firebase", "Error: ${databaseError.message}")
-                    // Hiển thị thông báo lỗi nếu có lỗi xảy ra khi truy vấn dữ liệu
-                    Toast.makeText(this@LoginActivity, "An error occurred", Toast.LENGTH_SHORT).show()
+                // Chuyển dữ liệu sang Activity khác
+                val intent = Intent(this@LoginActivity, HomeActivity::class.java).apply {
+                    putExtra("name", name)
+                    putExtra("email", email)
+                    putExtra("userID", userId)
                 }
-            })
+                startActivity(intent)
+                finish()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Xử lý lỗi...
+                Log.e("DatabaseError", "Error: ${databaseError.message}")
+            }
+        })
     }
 
     // Lưu mật khẩu vào SharedPreferences

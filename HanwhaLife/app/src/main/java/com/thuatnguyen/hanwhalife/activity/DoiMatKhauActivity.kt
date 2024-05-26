@@ -2,38 +2,37 @@ package com.thuatnguyen.hanwhalife.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
-import com.thuatnguyen.hanwhalife.model.Account
+import com.thuatnguyen.hanwhalife.model.User
 
 class DoiMatKhauActivity : AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
     lateinit var edtUsername: EditText
     lateinit var edtMatKhauCu: EditText
     lateinit var edtPassword: EditText
     lateinit var edtConfirmPassword: EditText
     lateinit var btnOK: Button
     lateinit var btnClose: Button
-    lateinit var databaseReference: DatabaseReference
-    lateinit var account: Account
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_doi_mat_khau)
+        auth = FirebaseAuth.getInstance()
 
-        databaseReference = FirebaseDatabase.getInstance().reference
         anhXa()
         loadDuLieu()
         addEvent()
@@ -41,53 +40,78 @@ class DoiMatKhauActivity : AppCompatActivity() {
     }
 
     private fun loadDuLieu() {
-        account = intent.getParcelableExtra<Account>("ACCOUNT")!!
-        edtUsername.setText(account.username)
+        val user = auth.currentUser
+        edtUsername.setText(user!!.email)
     }
 
     private fun addEvent() {
         btnOK.setOnClickListener {
-            if(account.password.equals(edtMatKhauCu.text.toString()))
-            {
-                if(edtPassword.text.toString().equals(edtConfirmPassword.text.toString()))
-                {
-                    val query = databaseReference.child("accounts").orderByChild("username").equalTo(account.username)
-                    query.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            for (snapshot in dataSnapshot.children) {
-                                // Lấy ra đối tượng tương ứng với username "abc"
-                                val account = snapshot.getValue(Account::class.java)
-                                // Xử lý đối tượng account ở đây
-                                val accountKey = snapshot.key
-                                // Cập nhật password của đối tượng tài khoản
-                                val newPassword = edtPassword.text.toString()
-                                val childUpdates = hashMapOf<String, Any>("password" to newPassword)
-                                databaseReference.child("accounts").child(accountKey!!).updateChildren(childUpdates)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(this@DoiMatKhauActivity,"Đổi mật khẩu rồi",Toast.LENGTH_SHORT).show()
-                                        HomeActivity.closeThisActivity(this@DoiMatKhauActivity)
-                                        finish()
-                                        val intent = Intent(this@DoiMatKhauActivity, LoginActivity::class.java)
-                                        startActivity(intent)
+            val currentPassword = edtMatKhauCu.text.toString().trim()
+            val newPassword = edtPassword.text.toString().trim()
+            val cofirmPassword = edtConfirmPassword.text.toString().trim()
 
-                                    }
-                                    .addOnFailureListener { e ->
-                                        // Xử lý khi cập nhật thất bại
-                                    }
+            // Kiểm tra xem các trường nhập mật khẩu có trống hay không
+            if (currentPassword.isEmpty()) {
+                edtMatKhauCu.error = "Mật khẩu cũ không được để trống"
+                edtMatKhauCu.requestFocus()
+                return@setOnClickListener
+            }
 
+            if (newPassword.isEmpty()) {
+                edtPassword.error = "Mật khẩu mới không được để trống"
+                edtPassword.requestFocus()
+                return@setOnClickListener
+            }
+            if (cofirmPassword.isEmpty()) {
+                edtConfirmPassword.error = "Xác nhận mật khẩu không được để trống"
+                edtConfirmPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (!newPassword.equals(cofirmPassword)) {
+                edtConfirmPassword.error = "Mật khẩu chưa giống nhau"
+                edtConfirmPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            val user = auth.currentUser
+            if (user != null) {
+                val email = user.email
+                if (email != null) {
+                    val credential = EmailAuthProvider.getCredential(email, currentPassword)
+
+                    user.reauthenticate(credential)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Xác thực thành công, thay đổi mật khẩu
+                                user.updatePassword(newPassword)
+                                    .addOnCompleteListener { updateTask ->
+                                        if (updateTask.isSuccessful) {
+                                            Toast.makeText(
+                                                this,
+                                                "Thay đổi mật khẩu thành công",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            // Xử lý sau khi đổi mật khẩu thành công, ví dụ: quay lại màn hình trước
+                                            finish()
+                                        } else {
+                                            // Xử lý lỗi khi đổi mật khẩu không thành công
+                                            Toast.makeText(
+                                                this,
+                                                "Thay đổi mật khẩu thất bại",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                            } else {
+                                // Xử lý lỗi khi xác thực không thành công
+                                Toast.makeText(
+                                    this,
+                                    "Mật khẩu cũ không đúng",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
-
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            // Xử lý khi truy vấn thất bại
-                        }
-                    })
-                    //Toast.makeText(this,query.toString(),Toast.LENGTH_SHORT).show()
-
-                    // Cập nhật giá trị của nút đó
-
-                }else{
-                    Toast.makeText(this,"Mật khẩu không giống nhau",Toast.LENGTH_SHORT).show()
                 }
             }
         }

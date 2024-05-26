@@ -27,7 +27,7 @@ class ChonLoaiDieuChinhFragment : Fragment() {
         btnBack = view.findViewById(R.id.btnBack)
         btnNext = view.findViewById(R.id.btnNext)
         val spinner: Spinner = view.findViewById(R.id.spDieuChinh)
-        val items = arrayOf("Chọn loại thông tin điều chỉnh","Điều chỉnh thông tin cá nhân", "Điều chỉnh tình trạng hôn nhân", "Điều chỉnh số điện thoại")
+        val items = arrayOf("Chọn loại thông tin điều chỉnh","Điều chỉnh căn cước công dân","Điều chỉnh số điện thoại")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -41,26 +41,30 @@ class ChonLoaiDieuChinhFragment : Fragment() {
                     {
                         Toast.makeText(requireContext(),"Vui lòng chọn loại điều chỉnh", Toast.LENGTH_SHORT).show()
                     }
-                    else if (selectedItem.equals("Điều chỉnh thông tin cá nhân")){
+                    else if (selectedItem.equals("Điều chỉnh căn cước công dân")){
+                        val bundle = Bundle()
+                        bundle.putString("thaydoi", "cccd")
                         // Thay đổi Fragment từ Fragment hiện tại
                         val fragmentManager = requireActivity().supportFragmentManager
                         val fragmentTransaction = fragmentManager.beginTransaction()
-
-                        val newFragment = DieuChinhCaNhan2Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
-                        fragmentTransaction.replace(R.id.frameDieuChinh, newFragment)
+                        val cccdFragment = DieuChinhCaNhan2Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
+                        cccdFragment.arguments = bundle
+                        fragmentTransaction.replace(R.id.frameDieuChinh, cccdFragment)
                         fragmentTransaction.addToBackStack(null) // Thêm Fragment vào Stack để có thể quay lại khi cần
                         fragmentTransaction.commit()
 
                     }
-                    else if (selectedItem.equals("Điều chỉnh tình trạng hôn nhân")){
-                        val intent = Intent(activity, DieuChinhCaNhanActivity::class.java)
-                        intent.putExtra("DieuChinh", "HonNhanBuoc1")
-                        startActivity(intent)
-                    }
                     else if (selectedItem.equals("Điều chỉnh số điện thoại")){
-                        val intent = Intent(activity, DieuChinhCaNhanActivity::class.java)
-                        intent.putExtra("DieuChinh", "DienThoaiBuoc1")
-                        startActivity(intent)
+                        val bundle = Bundle()
+                        bundle.putString("thaydoi", "sdt")
+                        // Thay đổi Fragment từ Fragment hiện tại
+                        val fragmentManager = requireActivity().supportFragmentManager
+                        val fragmentTransaction = fragmentManager.beginTransaction()
+                        val sdtFragment = DieuChinhCaNhan2Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
+                        sdtFragment.arguments=bundle
+                        fragmentTransaction.replace(R.id.frameDieuChinh, sdtFragment)
+                        fragmentTransaction.addToBackStack(null) // Thêm Fragment vào Stack để có thể quay lại khi cần
+                        fragmentTransaction.commit()
                     }
                 }
             }

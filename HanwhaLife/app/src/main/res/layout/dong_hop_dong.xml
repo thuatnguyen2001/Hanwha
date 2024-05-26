@@ -9,7 +9,9 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_margin="10dp"
-        android:background="@color/white"
+
+        android:background="@drawable/custom_border"
+
         android:orientation="vertical">
 
         <LinearLayout

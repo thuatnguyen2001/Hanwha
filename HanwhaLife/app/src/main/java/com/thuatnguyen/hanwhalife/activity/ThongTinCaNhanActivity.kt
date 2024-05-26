@@ -1,18 +1,15 @@
 package com.thuatnguyen.hanwhalife.activity
 
 import android.os.Bundle
-import android.widget.AdapterView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.adapter.ThongTinCaNhanApdapter
-import com.thuatnguyen.hanwhalife.model.Account
+import com.thuatnguyen.hanwhalife.model.User
 import com.thuatnguyen.hanwhalife.model.BMBH
-import com.thuatnguyen.hanwhalife.model.NDBH
 import com.thuatnguyen.hanwhalife.model.ThongTinCaNhanItem
 
 class ThongTinCaNhanActivity : AppCompatActivity() {
@@ -34,11 +31,10 @@ class ThongTinCaNhanActivity : AppCompatActivity() {
 
     private fun loadDuLieu() {
         val bmbh = intent.getParcelableExtra<BMBH>("BMBH")!!
-        val account = intent.getParcelableExtra<Account>("ACCOUNT")!!
+        val userID = intent.getStringExtra("userID")
         txtHoTen.text = bmbh.hoTen
 
         val items = listOf(
-            ThongTinCaNhanItem("Tên đăng nhập", account.username),
             ThongTinCaNhanItem("Họ và tên", bmbh.hoTen),
             ThongTinCaNhanItem("Ngày sinh", bmbh.ngaySinh),
             ThongTinCaNhanItem("CMND/CCCD", bmbh.cccd),

@@ -11,8 +11,10 @@ open class Person(
     val cccd: String?="",
     val ngayCap: String?="",
     val noiCap: String?="",
+    val sdt: String?="",
 ):Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -31,6 +33,7 @@ open class Person(
         parcel.writeString(cccd)
         parcel.writeString(ngayCap)
         parcel.writeString(noiCap)
+        parcel.writeString(sdt)
     }
 
     override fun describeContents(): Int {

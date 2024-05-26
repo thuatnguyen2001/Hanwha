@@ -75,7 +75,6 @@ class ChiTietHopDongActivity : AppCompatActivity() {
 
         val adapter = SanPhamBoSungAdapter(this,R.layout.dong_hop_dong,listSPBS)
         lvSPBS.adapter = adapter
-        Toast.makeText(this,listSPBS?.size.toString(),Toast.LENGTH_SHORT).show()
 
         btnBack.setOnClickListener {
             finish()

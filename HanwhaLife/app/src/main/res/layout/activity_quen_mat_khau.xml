@@ -20,8 +20,8 @@
 
 
     <EditText
-        android:id="@+id/edtUserName"
-        android:hint="Tài khoản"
+        android:id="@+id/edtEmail"
+        android:hint="Email"
         android:background="@drawable/custom_textfield_login"
         android:layout_gravity="center"
         android:paddingLeft="25dp"
@@ -29,67 +29,6 @@
         android:layout_width="350dp"
         android:layout_height="50dp"/>
 
-    <LinearLayout
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:background="@drawable/custom_textfield_login"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-        <EditText
-            android:id="@+id/edtSDT"
-            android:hint="Số điện thoại"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:layout_gravity="center"
-            android:paddingLeft="25dp"
-            android:background="@null"
-            android:paddingRight="15dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:background="@drawable/custom_textfield_login"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-        <EditText
-            android:id="@+id/edtPassword"
-            android:hint="Mật khẩu mới"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:layout_gravity="center"
-            android:paddingLeft="25dp"
-            android:background="@null"
-            android:inputType="textPassword"
-            android:paddingRight="15dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:background="@drawable/custom_textfield_login"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-        <EditText
-            android:id="@+id/edtConfirmPassword"
-            android:hint="Nhập lại mật khẩu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:layout_gravity="center"
-            android:paddingLeft="25dp"
-            android:background="@null"
-            android:inputType="textPassword"
-            android:paddingRight="15dp" />
-
-    </LinearLayout>
 
    <LinearLayout
        android:layout_width="match_parent"
@@ -98,9 +37,9 @@
        android:gravity="center"
        android:orientation="horizontal">
        <Button
-           android:id="@+id/btnOK"
+           android:id="@+id/btnLayLaiMK"
            android:background="@drawable/custom_buttom_login"
-           android:text="Đồng ý"
+           android:text="Lấy lại mật khẩu"
            android:textColor="@color/white"
            android:layout_gravity="center"
            android:layout_width="150dp"

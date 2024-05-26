@@ -1,63 +1,50 @@
-package com.thuatnguyen.hanwhalife.fragment
+package com.thuatnguyen.hanwhalife.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
-import com.thuatnguyen.hanwhalife.activity.ChiTietHopDongActivity
-import com.thuatnguyen.hanwhalife.activity.HomeActivity
-import com.thuatnguyen.hanwhalife.activity.LoginActivity
 import com.thuatnguyen.hanwhalife.adapter.HopDongAdapter
-import com.thuatnguyen.hanwhalife.adapter.ThongTinCaNhanApdapter
 import com.thuatnguyen.hanwhalife.model.BMBH
 import com.thuatnguyen.hanwhalife.model.HopDong
-import com.thuatnguyen.hanwhalife.model.NDBH
 import com.thuatnguyen.hanwhalife.model.SanPhamBoSung
 import com.thuatnguyen.hanwhalife.model.SanPhamChinh
-import com.thuatnguyen.hanwhalife.model.ThongTinCaNhanItem
 
-
-class HopDongFragment : Fragment() {
-    lateinit var listNDBHID :MutableList<NDBH>
-    lateinit var listSPBS :ArrayList<SanPhamBoSung>
-    lateinit var lvHopDong:ListView
-    lateinit var databaseReference: DatabaseReference
+class PayActivity : AppCompatActivity() {
+    private lateinit var databaseReference: DatabaseReference
+    lateinit var lvHopDong: ListView
+    lateinit var btnClose: LinearLayout
     lateinit var bmbh: BMBH
-    lateinit var ndbh: NDBH
     lateinit var listHD:MutableList<HopDong>
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_pay)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        var view = inflater.inflate(R.layout.fragment_hop_dong, container, false)
+        anhXa()
+        loadDuLieu()
 
-        databaseReference = FirebaseDatabase.getInstance().reference
+        btnClose.setOnClickListener {
+            finish()
+        }
+    }
 
-        ndbh = (activity as HomeActivity).ndbh
-        bmbh = (activity as HomeActivity).bmbh
-        lvHopDong = view.findViewById(R.id.lvHopDong)
-        listHD = mutableListOf()
+    private fun loadDuLieu() {
+        val bmbhID = intent.getStringExtra("bmbhID")
 
-        listNDBHID = mutableListOf()
-        listNDBHID.add(ndbh)
-        listSPBS = ArrayList()
-
-
-        val query = databaseReference.child("hopDong").orderByChild("bmbhID").equalTo(bmbh.bmbhID)
+        val query = databaseReference.child("hopDong").orderByChild("bmbhID").equalTo(bmbhID)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
@@ -69,16 +56,13 @@ class HopDongFragment : Fragment() {
                     //listNDBHID.add(hopDong?.ndbhID.toString())
                     listHD.add(HopDong(hopDong?.hopDongID,hopDong?.bmbhID,hopDong?.ndbhID,hopDong?.nthID,hopDong?.ngayKy,hopDong?.ngayDenHan,hopDong?.phiBaoHiem,sanPhamChinh,
                         ArrayList(sanPhamBoSung)))
-                    listSPBS = ArrayList(sanPhamBoSung)
 
                 }
-                val adapter = HopDongAdapter(requireContext(),R.layout.dong_hop_dong,listHD)
+                val adapter = HopDongAdapter(this@PayActivity,R.layout.dong_hop_dong,listHD)
                 lvHopDong.adapter = adapter
                 lvHopDong.setOnItemClickListener { parent, view, position, id ->
-                    val intent = Intent(activity, ChiTietHopDongActivity::class.java)
-                    intent.putExtra("BMBH",bmbh)
-                    intent.putExtra("NDBH",ndbh)
-                    intent.putExtra("HOPDONG",listHD.get(position))
+                    val intent = Intent(this@PayActivity, QRPaymentActivity::class.java)
+                    intent.putExtra("HopDong",listHD.get(position))
                     startActivity(intent)
                 }
 
@@ -88,10 +72,12 @@ class HopDongFragment : Fragment() {
                 // Xử lý lỗi nếu có
             }
         })
-
-
-
-        return view
     }
 
+    private fun anhXa() {
+        databaseReference = FirebaseDatabase.getInstance().reference
+        lvHopDong = findViewById(R.id.lvHopDong)
+        btnClose = findViewById(R.id.btnClose)
+        listHD = mutableListOf()
+    }
 }

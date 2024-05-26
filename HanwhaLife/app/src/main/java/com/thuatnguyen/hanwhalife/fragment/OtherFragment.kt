@@ -2,7 +2,6 @@ package com.thuatnguyen.hanwhalife.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,19 +9,15 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 
-import android.widget.Toast
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.activity.DoiMatKhauActivity
 import com.thuatnguyen.hanwhalife.activity.HomeActivity
 import com.thuatnguyen.hanwhalife.activity.LoginActivity
 import com.thuatnguyen.hanwhalife.activity.ThongTinCaNhanActivity
 import com.thuatnguyen.hanwhalife.activity.ThongTinLienHeActivity
-import com.thuatnguyen.hanwhalife.model.Account
+import com.thuatnguyen.hanwhalife.model.User
 import com.thuatnguyen.hanwhalife.model.BMBH
 import com.thuatnguyen.hanwhalife.model.NDBH
 
@@ -36,7 +31,7 @@ class OtherFragment : Fragment() {
     lateinit var btnDangXuat:LinearLayout
     lateinit var bmbh: BMBH
     lateinit var ndbh: NDBH
-    lateinit var account: Account
+    lateinit var userID : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +48,7 @@ class OtherFragment : Fragment() {
 
     private fun loadDuLieu() {
         bmbh = (activity as HomeActivity).bmbh
-        account = (activity as HomeActivity).account!!
+        userID = (activity as HomeActivity).userID
         txtHoTen.text= bmbh.hoTen
     }
 
@@ -74,7 +69,6 @@ class OtherFragment : Fragment() {
     private fun xuLyDoiMatKhau() {
         btnDoiMatKhau.setOnClickListener {
             val intent = Intent(activity, DoiMatKhauActivity::class.java)
-            intent.putExtra("ACCOUNT",account)
             startActivity(intent)
         }
     }
@@ -90,7 +84,7 @@ class OtherFragment : Fragment() {
         btnThongTinCaNhan.setOnClickListener {
             val intent = Intent(activity, ThongTinCaNhanActivity::class.java)
             intent.putExtra("BMBH",bmbh)
-            intent.putExtra("ACCOUNT",account)
+            intent.putExtra("userID",userID)
             startActivity(intent)
         }
     }

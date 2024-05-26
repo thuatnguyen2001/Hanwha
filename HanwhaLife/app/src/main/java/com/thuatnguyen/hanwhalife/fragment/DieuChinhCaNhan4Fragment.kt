@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.cast.framework.media.ImagePicker
 import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -72,73 +74,90 @@ class DieuChinhCaNhan4Fragment : Fragment() {
         noiCap = arguments?.getString("NOICAP")!!
         cccdCu = arguments?.getString("CMNDCU")!!
         btnUpload.setOnClickListener {
-            openFileChooser()
+            selectImages()
         }
         btnNext.setOnClickListener {
             uploadImages()
-            val dataMap = hashMapOf(
-                "CCCD: " to cccd,
-                "Ngày cấp: " to ngayCap,
-                "Nơi cấp: " to noiCap,
-                "status: " to "false"
-            )
-            //homeActivity?.updateMyString(cccdCu)
-            databaseReference.child("ThayDoiCCCD").child(cccdCu).setValue(dataMap)
-            val intent = Intent(activity, HomeActivity::class.java)
-            intent.putExtra("CCCDCU",cccdCu)
-            startActivity(intent)
-            closeAllFragmentsAndActivityFromFragment(this)
         }
 
         return view
     }
 
-    private fun openFileChooser() {
-        val intent = Intent()
-        intent.type = "image/*"
+    private fun selectImages() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGE_REQUEST)
+        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGES_REQUEST)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            if (data.clipData != null) {
-                val clipData = data.clipData
-                for (i in 0 until clipData!!.itemCount) {
-                    val imageUri = clipData.getItemAt(i).uri
-                    imageUris.add(imageUri)
+        if (requestCode == PICK_IMAGES_REQUEST && resultCode == Activity.RESULT_OK) {
+            data?.let {
+                val clipData = it.clipData
+                if (clipData != null) {
+                    for (i in 0 until clipData.itemCount) {
+                        val uri = clipData.getItemAt(i).uri
+                        imageUris.add(uri)
+                    }
+                } else {
+                    it.data?.let { uri ->
+                        imageUris.add(uri)
+                    }
                 }
-            } else if (data.data != null) {
-                val imageUri = data.data!!
-                imageUris.add(imageUri)
+                imageAdapter.notifyDataSetChanged()
             }
-            imageAdapter.notifyDataSetChanged()
         }
     }
 
 
     private fun uploadImages() {
-        for (uri in imageUris) {
-            val storageRef = storage.reference
-            val imageRef = storageRef.child("${cccd}/${UUID.randomUUID()}.jpg")
+        val storage = FirebaseStorage.getInstance()
+        val storageReference = storage.reference
 
-            imageRef.putFile(uri)
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Upload successful", Toast.LENGTH_SHORT).show()
+        val tasks = mutableListOf<com.google.android.gms.tasks.Task<Uri>>()
+
+        for (uri in imageUris) {
+            val fileName = UUID.randomUUID().toString()
+            val fileReference = storageReference.child("$cccdCu/$fileName")
+
+            val uploadTask = fileReference.putFile(uri)
+                .continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                    fileReference.downloadUrl
                 }
-                .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "Upload failed: $e", Toast.LENGTH_SHORT).show()
-                }
+
+            tasks.add(uploadTask)
         }
 
+        com.google.android.gms.tasks.Tasks.whenAllComplete(tasks)
+            .addOnCompleteListener {
+                Toast.makeText(requireContext(), "All images uploaded", Toast.LENGTH_SHORT).show()
+                val dataMap = hashMapOf(
+                    "CCCD: " to cccd,
+                    "Ngày cấp: " to ngayCap,
+                    "Nơi cấp: " to noiCap,
+                    "status: " to "false"
+                )
+                //homeActivity?.updateMyString(cccdCu)
+                databaseReference.child("ThayDoiCCCD").child(cccdCu).setValue(dataMap)
+                updateActivityString("New String from Fragment")
+                closeAllFragmentsAndActivityFromFragment(this)
+                // Xử lý logic khi tất cả ảnh đã tải lên thành công
+                 // Ví dụ: Đóng activity hiện tại
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Failed to upload some images", Toast.LENGTH_SHORT).show()
+                // Xử lý logic khi một hoặc nhiều ảnh tải lên thất bại
+            }
     }
 
 
     companion object {
-        private const val PICK_IMAGE_REQUEST = 1
+        private const val PICK_IMAGES_REQUEST = 1
     }
 
     fun closeAllFragmentsAndActivityFromFragment(fragment: Fragment) {
@@ -151,4 +170,11 @@ class DieuChinhCaNhan4Fragment : Fragment() {
             activity.finish()
         }
     }
+
+    private fun updateActivityString(newString: String) {
+        val intent = Intent("com.example.UPDATE_STRING")
+        intent.putExtra("new_string", cccdCu)
+        context?.sendBroadcast(intent)
+    }
+
 }

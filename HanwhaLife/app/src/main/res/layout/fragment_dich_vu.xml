@@ -37,6 +37,9 @@
                 android:id="@+id/itemGQQL"
                 android:layout_width="0dp"
                 android:layout_height="140dp"
+                android:background="@drawable/custom_linear_layout_background"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -70,6 +73,9 @@
                 android:layout_width="0dp"
                 android:layout_height="140dp"
                 android:layout_weight="1"
+                android:background="@drawable/custom_linear_layout_background"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -109,6 +115,9 @@
                 android:id="@+id/itemDieuChinhTTCN"
                 android:layout_width="0dp"
                 android:layout_height="140dp"
+                android:background="@drawable/custom_linear_layout_background"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -140,6 +149,9 @@
                 android:layout_width="0dp"
                 android:layout_height="140dp"
                 android:layout_weight="1"
+                android:background="@drawable/custom_linear_layout_background"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -147,6 +159,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
+                    android:background="@drawable/custom_linear_layout_background"
                     android:src="@drawable/contract"
                     app:tint="@color/orange" />
 
@@ -181,6 +194,9 @@
                 android:id="@+id/itemChamSoc"
                 android:layout_width="0dp"
                 android:layout_height="140dp"
+                android:background="@drawable/custom_linear_layout_background"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -213,6 +229,9 @@
                 android:id="@+id/itemThuVien"
                 android:layout_width="0dp"
                 android:layout_height="140dp"
+                android:background="@drawable/custom_linear_layout_background"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">

@@ -7,14 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.Toast
-import androidx.core.view.get
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.activity.DieuChinhCaNhanActivity
-import com.thuatnguyen.hanwhalife.activity.HomeActivity
 import com.thuatnguyen.hanwhalife.adapter.DoiTuongAdapter
-import com.thuatnguyen.hanwhalife.adapter.ThongTinCaNhanApdapter
-import com.thuatnguyen.hanwhalife.model.Account
 import com.thuatnguyen.hanwhalife.model.Person
 
 class DieuChinhCaNhan2Fragment : Fragment() {
@@ -33,32 +28,48 @@ class DieuChinhCaNhan2Fragment : Fragment() {
         val bmbh = (activity as DieuChinhCaNhanActivity).bmbh
         val ndbh = (activity as DieuChinhCaNhanActivity).ndbh
         val nth = (activity as DieuChinhCaNhanActivity).nth
-        doiTuongList.add(Person(bmbh.bmbhID,bmbh.hoTen,bmbh.ngaySinh,bmbh.gioiTinh,bmbh.cccd,bmbh.ngayCap,bmbh.noiCap))
+        doiTuongList.add(Person(bmbh.bmbhID,bmbh.hoTen,bmbh.ngaySinh,bmbh.gioiTinh,bmbh.cccd,bmbh.ngayCap,bmbh.noiCap,bmbh.sdt))
         if(!ndbh.cccd.equals(bmbh.cccd))
         {
-            doiTuongList.add(Person(ndbh.ndbhID,ndbh.hoTen,ndbh.ngaySinh,ndbh.gioiTinh,ndbh.cccd,ndbh.ngayCap,ndbh.noiCap))
+            doiTuongList.add(Person(ndbh.ndbhID,ndbh.hoTen,ndbh.ngaySinh,ndbh.gioiTinh,ndbh.cccd,ndbh.ngayCap,ndbh.noiCap,ndbh.sdt))
         }
         if(!nth.cccd.equals(bmbh.cccd) && !nth.cccd.equals(ndbh.cccd))
         {
-            doiTuongList.add(Person(nth.nthID,nth.hoTen,nth.ngaySinh,nth.gioiTinh,nth.cccd,nth.ngayCap,nth.noiCap))
+            doiTuongList.add(Person(nth.nthID,nth.hoTen,nth.ngaySinh,nth.gioiTinh,nth.cccd,nth.ngayCap,nth.noiCap,nth.sdt))
         }
 
         val adapter = DoiTuongAdapter(requireContext(), R.layout.dong_doi_tuong, doiTuongList)
         lvDoiTuong.adapter = adapter
 
         lvDoiTuong.setOnItemClickListener { parent, view, position, id ->
-            val bundle = Bundle()
-            bundle.putParcelable("person", doiTuongList.get(position))
+            val thayDoi = arguments?.getString("thaydoi")
+            if(thayDoi.equals("cccd"))
+            {
+                val bundle = Bundle()
+                bundle.putParcelable("person", doiTuongList.get(position))
+                // Thay đổi Fragment từ Fragment hiện tại
+                val fragmentManager = requireActivity().supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
 
-            // Thay đổi Fragment từ Fragment hiện tại
-            val fragmentManager = requireActivity().supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
+                val newFragment = DieuChinhCaNhan3Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
+                newFragment.arguments = bundle
+                fragmentTransaction.replace(R.id.frameDieuChinh, newFragment,"Buoc3")
+                fragmentTransaction.addToBackStack("Buoc3") // Thêm Fragment vào Stack để có thể quay lại khi cần
+                fragmentTransaction.commit()
+            }
+            if(thayDoi.equals("sdt"))
+            {
+                val bundle = Bundle()
+                bundle.putParcelable("person", doiTuongList.get(position))
+                val fragmentManager = requireActivity().supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
 
-            val newFragment = DieuChinhCaNhan3Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
-            newFragment.arguments = bundle
-            fragmentTransaction.replace(R.id.frameDieuChinh, newFragment,"Buoc3")
-            fragmentTransaction.addToBackStack("Buoc3") // Thêm Fragment vào Stack để có thể quay lại khi cần
-            fragmentTransaction.commit()
+                val newFragment = DieuChinhSdt3Fragment() // Thay NewFragment bằng Fragment bạn muốn thay đổi
+                newFragment.arguments = bundle
+                fragmentTransaction.replace(R.id.frameDieuChinh, newFragment,"Buoc3")
+                fragmentTransaction.addToBackStack("Buoc3") // Thêm Fragment vào Stack để có thể quay lại khi cần
+                fragmentTransaction.commit()
+            }
         }
 
         btnBack.setOnClickListener {
