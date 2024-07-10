@@ -76,7 +76,8 @@ class QRPaymentActivity : AppCompatActivity() {
         val bitmap = (imgQR.drawable as BitmapDrawable).bitmap
 
         // Lưu ảnh vào bộ nhớ của thiết bị
-        val filename = "qr_code.jpg"
+        val currentTimeMillis = System.currentTimeMillis()
+        val filename = currentTimeMillis.toString()+".jpg"
         val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filename)
         try {
             val outputStream = FileOutputStream(file)
