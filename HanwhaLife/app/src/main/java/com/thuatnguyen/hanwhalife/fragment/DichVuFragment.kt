@@ -13,15 +13,17 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.thuatnguyen.hanwhalife.R
+import com.thuatnguyen.hanwhalife.activity.ChonHopDongThanhToanActivity
 import com.thuatnguyen.hanwhalife.activity.DieuChinhCaNhanActivity
 import com.thuatnguyen.hanwhalife.activity.HomeActivity
+import com.thuatnguyen.hanwhalife.activity.LichSuDongPhiActivity
 import com.thuatnguyen.hanwhalife.activity.PayActivity
 import com.thuatnguyen.hanwhalife.activity.ThongTinLienHeActivity
 import com.thuatnguyen.hanwhalife.dialog.DieuChinhCaNhanDialog
 
 class DichVuFragment : Fragment() {
 
-    lateinit var itemGQQL: LinearLayout
+    lateinit var itemLSDP: LinearLayout
     lateinit var itemThanhToan: LinearLayout
     lateinit var itemDieuChinhTTCN: LinearLayout
     lateinit var itemDieuChinhHD: LinearLayout
@@ -42,7 +44,7 @@ class DichVuFragment : Fragment() {
     }
 
     private fun addEvent() {
-        xuLyChucNangGQQL();
+        xuLyChucNangLichSuDongPhi();
         xuLyChucNangThanhToan();
         xuLyChucNangDieuChinhTTCN();
         xuLyChucNangDieuChinhHD();
@@ -100,14 +102,22 @@ class DichVuFragment : Fragment() {
         }
     }
 
-    private fun xuLyChucNangGQQL() {
-        itemGQQL.setOnClickListener {
-            Toast.makeText(this.context,"Chức năng này đang cập nhật", Toast.LENGTH_SHORT).show();
+    private fun xuLyChucNangLichSuDongPhi() {
+        itemLSDP.setOnClickListener {
+            val bmbhID = (activity as HomeActivity).bmbh.bmbhID
+            if (bmbhID != null) {
+
+                val intent = Intent(activity, ChonHopDongThanhToanActivity::class.java)
+                intent.putExtra("bmbhID",bmbhID)
+                startActivity(intent)
+
+            }
+
         }
     }
 
     private fun anhXa(view: View) {
-        itemGQQL = view.findViewById(R.id.itemGQQL)
+        itemLSDP = view.findViewById(R.id.itemLichSuDongPhi)
         itemThanhToan = view.findViewById(R.id.itemThanhToan)
         itemDieuChinhTTCN = view.findViewById(R.id.itemDieuChinhTTCN)
         itemDieuChinhHD = view.findViewById(R.id.itemDieuChinhHD)

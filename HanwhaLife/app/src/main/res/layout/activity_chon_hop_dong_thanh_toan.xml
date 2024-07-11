@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChonHopDongThanhToanActivity">
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hợp đồng của tôi"
+            android:textSize="20sp"
+
+            android:textColor="@color/orange"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/lvHopDong"
+            android:layout_above="@id/btnClose"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:id="@+id/btnClose"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp"
+            android:background="@color/white"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <ImageButton
+                android:layout_width="24dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/back"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:text="Quay lại"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

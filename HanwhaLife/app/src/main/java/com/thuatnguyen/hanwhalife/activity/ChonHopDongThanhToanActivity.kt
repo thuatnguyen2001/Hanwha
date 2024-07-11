@@ -15,11 +15,12 @@ import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.adapter.HopDongAdapter
 import com.thuatnguyen.hanwhalife.model.BMBH
+import com.thuatnguyen.hanwhalife.model.DongPhi
 import com.thuatnguyen.hanwhalife.model.HopDong
 import com.thuatnguyen.hanwhalife.model.SanPhamBoSung
 import com.thuatnguyen.hanwhalife.model.SanPhamChinh
 
-class PayActivity : AppCompatActivity() {
+class ChonHopDongThanhToanActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     lateinit var lvHopDong: ListView
     lateinit var btnClose: LinearLayout
@@ -28,7 +29,8 @@ class PayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_pay)
+        setContentView(R.layout.activity_chon_hop_dong_thanh_toan)
+
 
         anhXa()
         loadDuLieu()
@@ -49,16 +51,16 @@ class PayActivity : AppCompatActivity() {
                     val hopDong = snapshot.getValue(HopDong::class.java)
                     val sanPhamChinh = snapshot.child("sanPhamChinh").getValue(SanPhamChinh::class.java)
                     val sanPhamBoSung = snapshot.child("sanPhamBoSung").getValue(object : GenericTypeIndicator<List<SanPhamBoSung>>() {})
-
-                    //listNDBHID.add(hopDong?.ndbhID.toString())
+                    val lichSuDongPhi = snapshot.child("lichSuDongPhi").getValue(object : GenericTypeIndicator<List<DongPhi>>() {})
                     listHD.add(HopDong(hopDong?.hopDongID,hopDong?.bmbhID,hopDong?.ndbhID,hopDong?.nthID,hopDong?.ngayKy,hopDong?.ngayDenHan,hopDong?.phiBaoHiem,sanPhamChinh,
-                        ArrayList(sanPhamBoSung)))
+                        ArrayList(sanPhamBoSung),ArrayList(lichSuDongPhi)))
 
                 }
-                val adapter = HopDongAdapter(this@PayActivity,R.layout.dong_hop_dong,listHD)
+                val adapter = HopDongAdapter(this@ChonHopDongThanhToanActivity,R.layout.dong_hop_dong,listHD)
                 lvHopDong.adapter = adapter
                 lvHopDong.setOnItemClickListener { parent, view, position, id ->
-                    val intent = Intent(this@PayActivity, QRPaymentActivity::class.java)
+                    val intent = Intent(this@ChonHopDongThanhToanActivity, LichSuDongPhiActivity::class.java)
+                    //Toast.makeText(this@ChonHopDongThanhToanActivity,listHD.get(position).lichSuDongPhi?.get(0)?.hinhThuc,Toast.LENGTH_SHORT).show()
                     intent.putExtra("HopDong",listHD.get(position))
                     startActivity(intent)
                 }
@@ -77,4 +79,5 @@ class PayActivity : AppCompatActivity() {
         btnClose = findViewById(R.id.btnClose)
         listHD = mutableListOf()
     }
+
 }

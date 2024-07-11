@@ -6,10 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -19,15 +16,12 @@ import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.activity.ChiTietHopDongActivity
 import com.thuatnguyen.hanwhalife.activity.HomeActivity
-import com.thuatnguyen.hanwhalife.activity.LoginActivity
 import com.thuatnguyen.hanwhalife.adapter.HopDongAdapter
-import com.thuatnguyen.hanwhalife.adapter.ThongTinCaNhanApdapter
 import com.thuatnguyen.hanwhalife.model.BMBH
 import com.thuatnguyen.hanwhalife.model.HopDong
 import com.thuatnguyen.hanwhalife.model.NDBH
 import com.thuatnguyen.hanwhalife.model.SanPhamBoSung
 import com.thuatnguyen.hanwhalife.model.SanPhamChinh
-import com.thuatnguyen.hanwhalife.model.ThongTinCaNhanItem
 
 
 class HopDongFragment : Fragment() {
@@ -36,7 +30,7 @@ class HopDongFragment : Fragment() {
     lateinit var lvHopDong:ListView
     lateinit var databaseReference: DatabaseReference
     lateinit var bmbh: BMBH
-    lateinit var ndbh: NDBH
+    //lateinit var ndbh: NDBH
     lateinit var listHD:MutableList<HopDong>
 
     override fun onCreateView(
@@ -47,13 +41,13 @@ class HopDongFragment : Fragment() {
 
         databaseReference = FirebaseDatabase.getInstance().reference
 
-        ndbh = (activity as HomeActivity).ndbh
+        //ndbh = (activity as HomeActivity).ndbh
         bmbh = (activity as HomeActivity).bmbh
         lvHopDong = view.findViewById(R.id.lvHopDong)
         listHD = mutableListOf()
 
         listNDBHID = mutableListOf()
-        listNDBHID.add(ndbh)
+        //listNDBHID.add(ndbh)
         listSPBS = ArrayList()
 
 
@@ -77,7 +71,7 @@ class HopDongFragment : Fragment() {
                 lvHopDong.setOnItemClickListener { parent, view, position, id ->
                     val intent = Intent(activity, ChiTietHopDongActivity::class.java)
                     intent.putExtra("BMBH",bmbh)
-                    intent.putExtra("NDBH",ndbh)
+                    //intent.putExtra("NDBH",ndbh)
                     intent.putExtra("HOPDONG",listHD.get(position))
                     startActivity(intent)
                 }

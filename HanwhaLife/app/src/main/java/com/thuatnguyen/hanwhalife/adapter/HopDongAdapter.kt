@@ -14,10 +14,8 @@ import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.model.HopDong
 import com.thuatnguyen.hanwhalife.model.NDBH
-import com.thuatnguyen.hanwhalife.model.Person
-import com.thuatnguyen.hanwhalife.model.SanPhamBoSung
 
-class HopDongAdapter( context: Context, resource: Int, objects: List<HopDong>):
+class HopDongAdapter(context: Context, resource: Int, objects: MutableList<HopDong>):
     ArrayAdapter<HopDong>(context, resource,objects) {
     @SuppressLint("ResourceAsColor")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

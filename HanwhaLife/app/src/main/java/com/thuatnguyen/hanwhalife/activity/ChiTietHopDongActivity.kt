@@ -1,5 +1,6 @@
 package com.thuatnguyen.hanwhalife.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
@@ -10,12 +11,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.ImageButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.database.ValueEventListener
 import com.thuatnguyen.hanwhalife.R
 import com.thuatnguyen.hanwhalife.adapter.HopDongAdapter
 import com.thuatnguyen.hanwhalife.adapter.SanPhamBoSungAdapter
 import com.thuatnguyen.hanwhalife.model.BMBH
 import com.thuatnguyen.hanwhalife.model.HopDong
 import com.thuatnguyen.hanwhalife.model.NDBH
+import com.thuatnguyen.hanwhalife.model.SanPhamBoSung
+import com.thuatnguyen.hanwhalife.model.SanPhamChinh
 
 class ChiTietHopDongActivity : AppCompatActivity() {
     lateinit var txtTenSP :TextView
@@ -32,7 +41,7 @@ class ChiTietHopDongActivity : AppCompatActivity() {
     lateinit var txtNgayKy :TextView
     lateinit var txtNgayDenHan :TextView
     lateinit var btnBack :ImageButton
-
+    lateinit var databaseReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +51,27 @@ class ChiTietHopDongActivity : AppCompatActivity() {
         anhXa()
 
         val bmbh = intent.getParcelableExtra("BMBH") as BMBH?
-        val ndbh = intent.getParcelableExtra("NDBH") as NDBH?
         val hopDong = intent.getParcelableExtra("HOPDONG") as HopDong?
+        databaseReference = FirebaseDatabase.getInstance().reference
+
+        val ndbhId = hopDong?.ndbhID
+
+        databaseReference.child("NDBH").orderByChild("ndbhID").equalTo(ndbhId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (data in snapshot.children) {
+                        val ndbh = data.getValue(NDBH::class.java)!!
+                        txtNDBH.text=ndbh.hoTen
+                        return
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Xử lý lỗi
+                    Toast.makeText(this@ChiTietHopDongActivity, "Lỗi: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+
 
         txtTenSP.text = "Hanwha Life - "+ hopDong?.sanPhamChinh?.tenSP
         txtSoHD.text = hopDong?.hopDongID
@@ -53,7 +81,7 @@ class ChiTietHopDongActivity : AppCompatActivity() {
         txtTenBMBH.text = bmbh?.hoTen
         txtTenSPChinh.text = hopDong?.sanPhamChinh?.tenSP
         txtPhiDinhKyChinh.text = formatMoney(hopDong?.sanPhamChinh?.phiDinhKy)
-        txtNDBH.text = ndbh?.hoTen
+
         txtSoTienBH.text = formatMoney(hopDong?.sanPhamChinh?.soTienBH)
         val listSPBS = ArrayList(hopDong?.listSPBS)
 

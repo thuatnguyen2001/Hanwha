@@ -34,7 +34,7 @@
             android:paddingHorizontal="0dp">
 
             <LinearLayout
-                android:id="@+id/itemGQQL"
+                android:id="@+id/itemLichSuDongPhi"
                 android:layout_width="0dp"
                 android:layout_height="140dp"
                 android:background="@drawable/custom_linear_layout_background"
@@ -48,7 +48,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/icon_quyenloi" />
+                    android:src="@drawable/history" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:inputType="textMultiLine"
-                    android:text="Giải quyết quyền lợi bảo hiểm" />
+                    android:text="Lịch sử đóng phí" />
 
             </LinearLayout>
             <EditText

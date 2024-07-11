@@ -2,18 +2,18 @@ package com.thuatnguyen.hanwhalife.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
 
 class HopDong(
-    val hopDongID :String?="",
-    val bmbhID :String?="",
-    val ndbhID :String?="",
-    val nthID :String?="",
-    val ngayKy :String?="",
-    val ngayDenHan :String?="",
+    val hopDongID:String?="",
+    val bmbhID:String?="",
+    val ndbhID:String?="",
+    val nthID:String?="",
+    val ngayKy:String?="",
+    val ngayDenHan:String?="",
     val phiBaoHiem:Long?=0,
     val sanPhamChinh: SanPhamChinh?=null,
-    val listSPBS : ArrayList<SanPhamBoSung>?=null
+    val listSPBS: ArrayList<SanPhamBoSung>?=null,
+    val lichSuDongPhi: ArrayList<DongPhi>? =null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -24,7 +24,8 @@ class HopDong(
         parcel.readString(),
         parcel.readValue(Long::class.java.classLoader) as? Long,
         parcel.readParcelable(SanPhamChinh::class.java.classLoader),
-        parcel.createTypedArrayList(SanPhamBoSung)
+        parcel.createTypedArrayList(SanPhamBoSung),
+        parcel.createTypedArrayList(DongPhi)
     ) {
     }
 
@@ -38,6 +39,7 @@ class HopDong(
         parcel.writeValue(phiBaoHiem)
         parcel.writeParcelable(sanPhamChinh, flags)
         parcel.writeTypedList(listSPBS)
+        parcel.writeTypedList(lichSuDongPhi)
     }
 
     override fun describeContents(): Int {
